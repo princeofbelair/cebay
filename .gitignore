@@ -1,5 +1,6 @@
 .gradle
 build/
+client/ce-bay_client/.idea/*
 
 # Ignore Gradle GUI config
 gradle-app.setting

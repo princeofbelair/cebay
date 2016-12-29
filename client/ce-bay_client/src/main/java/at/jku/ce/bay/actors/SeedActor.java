@@ -23,7 +23,7 @@ public class SeedActor extends UntypedActor {
 
     private String filePath = "test.txt";
 
-    public void onReceive(Object message) throws Throwable {
+    public synchronized void onReceive(Object message) throws Throwable {
 
         if(message instanceof InitPublish) {
             ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());

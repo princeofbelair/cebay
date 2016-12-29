@@ -9,12 +9,22 @@ import at.jku.ce.bay.helper.CEBayHelper;
  * Created by Romana on 29.12.2016.
  */
 
-public class Client {
+public class Client extends UntypedActor{
 
-    public void publishSeederActor () {
-        ActorSystem actorSystem = ActorSystem.create("ActorSystemStud112");
-        ActorRef actor = actorSystem.actorOf(SeedActor.props(), "ActorStud112");
+    public static class Initialize {
 
-        actor.tell(new SeedActor.InitPublish(), null);
+    }
+
+    public static Props props () {
+        return Props.create(SeedActor.class);
+    }
+
+    public void onReceive(Object message) throws Throwable {
+        if(message instanceof Initialize) {
+            ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
+            cebay.tell(new GetFileNames(), getSelf());
+        } else {
+            System.out.println(message.toString());
+        }
     }
 }

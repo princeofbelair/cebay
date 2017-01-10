@@ -1,12 +1,11 @@
-package at.jku.ce.bay.actors;
+package at.jku.ce.bay.seedActor;
 
 import akka.actor.ActorSelection;
 import akka.actor.Props;
 import akka.actor.UntypedActor;
-import at.jku.ce.bay.api.GetFile;
-import at.jku.ce.bay.api.GetFileNames;
-import at.jku.ce.bay.api.Publish;
+import at.jku.ce.bay.api.*;
 import at.jku.ce.bay.helper.CEBayHelper;
+
 
 import java.io.File;
 
@@ -25,14 +24,18 @@ public class SeedActor extends UntypedActor {
 
     private String filePath = "test.txt";
 
-    public synchronized void onReceive(Object message) throws Throwable {
+    public void onReceive(Object message) throws Throwable {
 
         if(message instanceof InitPublish) {
             ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
 
-            cebay.tell(new Publish(filePath, hashedFileName(), seederAddress()), getSelf());
+            //cebay.tell(new Publish(filePath, hashedFileName(), seederAddress()), getSelf());
+            cebay.tell(new GetFileNames(), getSelf());
+            System.out.println("Hallo");
+        } else if(message instanceof FileRetrieved) {
+            System.out.println("Hallo" + message);
         } else {
-            System.out.println(message.toString());
+            System.out.println("xffggh" + message.toString());
         }
 
     }

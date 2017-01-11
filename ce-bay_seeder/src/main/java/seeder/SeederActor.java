@@ -6,6 +6,7 @@ import akka.actor.UntypedActor;
 import at.jku.ce.bay.api.*;
 import at.jku.ce.bay.utils.CEBayHelper;
 import java.io.File;
+import java.util.List;
 
 
 /**
@@ -24,21 +25,27 @@ public class SeederActor extends UntypedActor {
     }
 
     private String filePath = "test.txt";
+    ActorSelection cebay;
 
     public void onReceive(Object message) throws Throwable {
 
         if(message instanceof InitPublish) {
-            ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
+            cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
 
             //cebay.tell(new Publish(filePath, hashedFileName(), seederAddress()), getSelf());
             cebay.tell(new GetFileNames(), getSelf());
             System.out.println("Hallo");
         } else if(message instanceof FilesFound) {
-            System.out.println("Hallo" + message);
+            System.out.println("Files: " + message);
+            FilesFound files = (FilesFound) message;
+            List<String> fileList = files.fileNames();
+            for(String fileName : fileList) {
+                System.out.println("Files: " + fileName);
+            }
+
         } else {
             System.out.println("xffggh" + message.toString());
         }
-
     }
 
     private String hashedFileName() {

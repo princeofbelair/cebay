@@ -3,11 +3,13 @@ package at.jku.ce.bay.app;
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
 import at.jku.ce.bay.utils.CEBayHelper;
+import scala.concurrent.duration.Duration;
 import seeder.SeederActor;
 
 import java.io.File;
 import java.io.IOException;
 import java.security.NoSuchAlgorithmException;
+import java.util.concurrent.TimeUnit;
 
 public class App {
 
@@ -17,6 +19,7 @@ public class App {
         ActorRef actor = actorSystem.actorOf(SeederActor.props(), "ActorStud112");
 
         actor.tell(new SeederActor.InitPublish(), null);
+
 
 
         /*//liefert den für 'Publish' benötigten Hashwert

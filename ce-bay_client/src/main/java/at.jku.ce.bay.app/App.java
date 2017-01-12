@@ -25,11 +25,13 @@ public class App {
 
         System.out.println("--------------------------------");
         System.out.println("CE BAY Client");
-        System.out.println("--------------------------------\n\n");
+        System.out.println("--------------------------------\n");
 
         do {
             try {
+                System.out.println("---------------------------------------------------------------------------------------------------");
                 System.out.println("INFO: Type 'get' to list all files. Type 'find' to get file. Type 'exit' to terminate actor system.");
+                System.out.println("---------------------------------------------------------------------------------------------------");
                 System.out.print("Input: ");
                 input = in.readLine();
 

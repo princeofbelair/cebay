@@ -18,8 +18,8 @@ public class App {
 
         Random rnd = new Random();
 
-        ActorSystem actorSystem = ActorSystem.create("ActorSystemStud" + rnd.nextInt());
-        ActorRef actor = actorSystem.actorOf(SeederActor.props(), "ActorStud" + rnd.nextInt());
+        ActorSystem actorSystem = ActorSystem.create("Winterfell");
+        ActorRef actor = actorSystem.actorOf(SeederActor.props(), "Winterfell");
 
         publishFile(actor);
 

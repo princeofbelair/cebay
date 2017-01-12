@@ -20,29 +20,35 @@ public class SeederActor extends UntypedActor {
         return Props.create(SeederActor.class);
     }
 
-    public static class InitPublish {
-
-    }
+    public static class InitPublish {}
 
     private String filePath = "TheNorthRemembers.txt";
-    ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());;
+    private String fileName = "TheNorthRemembers.txt";
+    private ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
+    private File file = new File(filePath);
 
     public void onReceive(Object message) throws Throwable {
 
         if(message instanceof InitPublish) {
-            this.cebay.tell(new Publish(filePath, hashedFileName(), seederAddress()), getSelf());
+            cebay.tell(new Publish(filePath, hashedFileName(), seederAddress()), getSelf());
+        } else if(message instanceof GetFile) {
+            GetFile requestedFile = (GetFile) message;
+            if(requestedFile.name().equals(this.fileName)) {
+                byte[] data = new byte[(int)file.length()];
+                getSender().tell(new FileRetrieved(data), getSelf());
+            } else {
+                getSender().tell(new FileNotFound(requestedFile.name()), getSelf());
+            }
         } else {
-
-
+            System.out.println("Hallo, ich funktioniere!!");
         }
-        System.out.println("Received Message");
-        System.out.println(message.toString());
+
     }
 
     private String hashedFileName() {
         String hash = null;
         try {
-            hash = CEBayHelper.GetHash(new File(this.filePath));
+            hash = CEBayHelper.GetHash(file);
         } catch (Exception e) {
             e.printStackTrace();
         }

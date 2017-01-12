@@ -6,6 +6,7 @@ import akka.actor.UntypedActor;
 import at.jku.ce.bay.api.*;
 import at.jku.ce.bay.utils.CEBayHelper;
 import java.io.File;
+import java.io.FileInputStream;
 import java.util.List;
 
 
@@ -22,8 +23,8 @@ public class SeederActor extends UntypedActor {
 
     public static class InitPublish {}
 
-    private String filePath = "TheNorthRemembers.txt";
-    private String fileName = "TheNorthRemembers.txt";
+    private String filePath = "DieJoffreyDie.txt";
+    private String fileName = "DieJoffreyDie.txt";
     private ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
     private File file = new File(filePath);
 
@@ -35,7 +36,12 @@ public class SeederActor extends UntypedActor {
             GetFile requestedFile = (GetFile) message;
             if(requestedFile.name().equals(this.fileName)) {
                 byte[] data = new byte[(int)file.length()];
-                getSender().tell(new FileRetrieved(data), getSelf());
+                FileInputStream fis = new FileInputStream(file);
+                if(fis.read(data) != -1) {
+                    getSender().tell(new FileRetrieved(data), getSelf());
+                }
+                fis.close();
+
             } else {
                 getSender().tell(new FileNotFound(requestedFile.name()), getSelf());
             }

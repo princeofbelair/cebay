@@ -15,42 +15,44 @@ import java.util.Random;
 
 public class App {
 
+    public static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+    private static Random rnd = new Random();
+    private static ActorSystem actorSystem = ActorSystem.create("ClientSystemStud" + rnd.nextInt());
+    private static ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud" + rnd.nextInt());
+
     public static void main(String[] args) {
-
-        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-        String input = "";
-        Random rnd = new Random();
-        ActorSystem actorSystem = ActorSystem.create("ClientSystemStud" + rnd.nextInt());
-        ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud" + rnd.nextInt());
-
         System.out.println("--------------------------------");
         System.out.println("CE BAY Client");
         System.out.println("--------------------------------\n");
+        showMenu();
+    }
 
-        do {
-            try {
-                System.out.println("---------------------------------------------------------------------------------------------------");
-                System.out.println("INFO: Type 'get' to list all files. Type 'find' to get file. Type 'exit' to terminate actor system.");
-                System.out.println("---------------------------------------------------------------------------------------------------");
-                System.out.print("Input: ");
-                input = in.readLine();
+    public static void showMenu() {
 
-                if(input.equalsIgnoreCase("get")) {
-                        getFileNames(actor);
-                } else if(input.equalsIgnoreCase("find")) {
-                    System.out.print("Enter filename: ");
-                    String fileName = in.readLine();
-                    findFile(actor, fileName);
-                }
+        String input = "";
 
-            } catch (IOException e) {
-                e.printStackTrace();
+        try {
+            System.out.println("---------------------------------------------------------------------------------------------------");
+            System.out.println("INFO: Type 'get' to list all files. Type 'find' to get file. Type 'exit' to terminate actor system.");
+            System.out.println("---------------------------------------------------------------------------------------------------");
+            System.out.print("Input: ");
+            input = in.readLine();
+
+            if(input.equalsIgnoreCase("get")) {
+                getFileNames(actor);
+            } else if(input.equalsIgnoreCase("find")) {
+                System.out.print("Enter filename: ");
+                String fileName = in.readLine();
+                findFile(actor, fileName);
+            } else if(input.equalsIgnoreCase("exit")) {
+                terminateActorSystem(actorSystem);
+            } else {
+                showMenu();
             }
-        } while(!input.equals("exit"));
 
-        terminateActorSystem(actorSystem);
-
-
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private static void getFileNames (ActorRef actor) {

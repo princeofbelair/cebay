@@ -2,41 +2,66 @@ package at.jku.ce.bay.app;
 
 import akka.actor.ActorRef;
 import akka.actor.ActorSystem;
+import akka.actor.SystemGuardian;
 import at.jku.ce.bay.utils.CEBayHelper;
 import client.Client;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.NoSuchAlgorithmException;
+import java.util.Random;
 
 public class App {
 
     public static void main(String[] args) {
 
-        startClient();
+        BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+        String input = "";
+        Random rnd = new Random();
+        ActorSystem actorSystem = ActorSystem.create("ClientSystemStud" + rnd.nextInt());
+        ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud" + rnd.nextInt());
 
-        /*//liefert den für 'Publish' benötigten Hashwert
-        try {
-            CEBayHelper.GetHash(new File(""));
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        System.out.println("--------------------------------");
+        System.out.println("CE BAY Client");
+        System.out.println("--------------------------------\n\n");
 
-        //Liefert die Referenz zum CEBay Actor, der vom CE Inst. bereitgestellt wird
-        CEBayHelper.GetRegistryActorRef();
+        do {
+            try {
+                System.out.println("INFO: Type 'get' to list all files. Type 'find' to get file. Type 'exit' to terminate actor system.");
+                System.out.print("Input: ");
+                input = in.readLine();
 
-        //Wird für die Umwandlung einer ActorRef in die zu versendende Stringrepräsentation benötigt
-        CEBayHelper.GetRemoteActorRef(ActorRef.noSender());*/
+                if(input.equalsIgnoreCase("get")) {
+                        getFileNames(actor);
+                } else if(input.equalsIgnoreCase("find")) {
+                    System.out.print("Enter filename: ");
+                    String fileName = in.readLine();
+                    findFile(actor, fileName);
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } while(!input.equals("exit"));
+
+        terminateActorSystem(actorSystem);
+
 
     }
 
-    private static void startClient () {
-        ActorSystem actorSystem = ActorSystem.create("ClientSystemStud112");
-        ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud112");
+    private static void getFileNames (ActorRef actor) {
         //send startMessage
         actor.tell(new Client.InitPublish(), null);
+    }
+
+    private static void findFile(ActorRef actor, String filename) {
+        actor.tell(new Client.InitFindFile(filename), null);
+    }
+
+    private static void terminateActorSystem(ActorSystem system) {
+        system.shutdown();
     }
 
 }

@@ -24,28 +24,19 @@ public class SeederActor extends UntypedActor {
 
     }
 
-    private String filePath = "test.txt";
-    ActorSelection cebay;
+    private String filePath = "TheNorthRemembers.txt";
+    ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());;
 
     public void onReceive(Object message) throws Throwable {
 
         if(message instanceof InitPublish) {
-            cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
-
-            //cebay.tell(new Publish(filePath, hashedFileName(), seederAddress()), getSelf());
-            cebay.tell(new GetFileNames(), getSelf());
-            System.out.println("Hallo");
-        } else if(message instanceof FilesFound) {
-            System.out.println("Files: " + message);
-            FilesFound files = (FilesFound) message;
-            List<String> fileList = files.fileNames();
-            for(String fileName : fileList) {
-                System.out.println("Files: " + fileName);
-            }
-
+            this.cebay.tell(new Publish(filePath, hashedFileName(), seederAddress()), getSelf());
         } else {
-            System.out.println("xffggh" + message.toString());
+
+
         }
+        System.out.println("Received Message");
+        System.out.println(message.toString());
     }
 
     private String hashedFileName() {

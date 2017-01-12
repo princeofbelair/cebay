@@ -13,11 +13,7 @@ public class App {
 
     public static void main(String[] args) {
 
-
-        ActorSystem actorSystem = ActorSystem.create("ClientSystemStud112");
-        ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud112");
-
-        actor.tell(new Client.InitPublish(), null);
+        startClient();
 
         /*//liefert den für 'Publish' benötigten Hashwert
         try {
@@ -34,6 +30,13 @@ public class App {
         //Wird für die Umwandlung einer ActorRef in die zu versendende Stringrepräsentation benötigt
         CEBayHelper.GetRemoteActorRef(ActorRef.noSender());*/
 
+    }
+
+    private static void startClient () {
+        ActorSystem actorSystem = ActorSystem.create("ClientSystemStud112");
+        ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud112");
+        //send startMessage
+        actor.tell(new Client.InitPublish(), null);
     }
 
 }

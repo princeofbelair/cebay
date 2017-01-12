@@ -1,7 +1,9 @@
 package at.jku.ce.bay.app;
 
 import akka.actor.ActorRef;
+import akka.actor.ActorSystem;
 import at.jku.ce.bay.utils.CEBayHelper;
+import client.Client;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,7 +13,13 @@ public class App {
 
     public static void main(String[] args) {
 
-        //liefert den für 'Publish' benötigten Hashwert
+
+        ActorSystem actorSystem = ActorSystem.create("ClientSystemStud112");
+        ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud112");
+
+        actor.tell(new Client.InitPublish(), null);
+
+        /*//liefert den für 'Publish' benötigten Hashwert
         try {
             CEBayHelper.GetHash(new File(""));
         } catch (IOException e) {
@@ -24,7 +32,7 @@ public class App {
         CEBayHelper.GetRegistryActorRef();
 
         //Wird für die Umwandlung einer ActorRef in die zu versendende Stringrepräsentation benötigt
-        CEBayHelper.GetRemoteActorRef(ActorRef.noSender());
+        CEBayHelper.GetRemoteActorRef(ActorRef.noSender());*/
 
     }
 

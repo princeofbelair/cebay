@@ -15,8 +15,8 @@ public class App {
 
     public static void main(String[] args) {
 
-        ActorSystem actorSystem = ActorSystem.create("ActorSystemStud112");
-        ActorRef actor = actorSystem.actorOf(SeederActor.props(), "ActorStud112");
+        ActorSystem actorSystem = ActorSystem.create("ActorSystemStud");
+        ActorRef actor = actorSystem.actorOf(SeederActor.props(), "ActorStud");
 
         actor.tell(new SeederActor.InitPublish(), null);
 

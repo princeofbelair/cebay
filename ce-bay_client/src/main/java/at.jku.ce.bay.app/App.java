@@ -5,6 +5,7 @@ import akka.actor.ActorSystem;
 import akka.actor.SystemGuardian;
 import at.jku.ce.bay.utils.CEBayHelper;
 import client.Client;
+import com.typesafe.config.ConfigFactory;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -17,8 +18,8 @@ public class App {
 
     public static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private static Random rnd = new Random();
-    private static ActorSystem actorSystem = ActorSystem.create("ClientSystemStud" + rnd.nextInt());
-    private static ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud" + rnd.nextInt());
+    private static ActorSystem actorSystem = ActorSystem.create("ClientSystemStud112", ConfigFactory.load("application"));
+    private static ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud112");
 
     public static void main(String[] args) {
         System.out.println("--------------------------------");

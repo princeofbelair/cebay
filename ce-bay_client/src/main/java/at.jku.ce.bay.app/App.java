@@ -18,8 +18,8 @@ public class App {
 
     public static BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
     private static Random rnd = new Random();
-    private static ActorSystem actorSystem = ActorSystem.create("ClientSystemStud112", ConfigFactory.load("application"));
-    private static ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud112");
+    private static ActorSystem actorSystem = ActorSystem.create("ClientSystemStud112"+rnd.nextInt());
+    private static ActorRef actor = actorSystem.actorOf(Client.props(), "ClientActorStud112"+rnd.nextInt());
 
     public static void main(String[] args) {
         System.out.println("--------------------------------");

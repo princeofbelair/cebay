@@ -19,8 +19,8 @@ public class App {
 
         Random rnd = new Random();
 
-        ActorSystem actorSystem = ActorSystem.create("snow", ConfigFactory.load("application"));
-        ActorRef actor = actorSystem.actorOf(SeederActor.props(), "Snow");
+        ActorSystem actorSystem = ActorSystem.create("testActor13");
+        ActorRef actor = actorSystem.actorOf(SeederActor.props(), "testActor13");
 
         publishFile(actor);
 

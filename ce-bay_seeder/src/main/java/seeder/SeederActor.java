@@ -10,9 +10,6 @@ import java.io.FileInputStream;
 import java.util.List;
 
 
-/**
- * Created by Romana on 10.01.2017.
- */
 
 
 public class SeederActor extends UntypedActor {
@@ -23,8 +20,8 @@ public class SeederActor extends UntypedActor {
 
     public static class InitPublish {}
 
-    private String filePath = "DieJoffreyDie.txt";
-    private String fileName = "DieJoffreyDie.txt";
+    private String filePath = "Uni.java";
+    private String fileName = "Uni.java";
     private ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
     private File file = new File(filePath);
 
@@ -45,8 +42,11 @@ public class SeederActor extends UntypedActor {
             } else {
                 getSender().tell(new FileNotFound(requestedFile.name()), getSelf());
             }
+        } else if (message instanceof GetStatus) {
+            getSender().tell(new StatusRetrieved(), getSelf());
         } else {
-            System.out.println("Hallo, ich funktioniere!!");
+            //if unknown message
+            getSender().tell("Diese Nachricht konnte nicht verarbeitet werden!", getSelf());
         }
 
     }

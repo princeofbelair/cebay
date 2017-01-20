@@ -6,10 +6,11 @@ import org.apache.commons.io.IOUtils;
 import java.io.*;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import static at.jku.ce.bay.app.App.seederActor;
 
 public class CEBayHelper {
 
-  private static String SYS_NAME = "testActor13";
+  private static String SYS_NAME = seederActor;
   private static String SYS_HOST = "140.78.187.127";
   private static int SYS_PORT = 2552;
 

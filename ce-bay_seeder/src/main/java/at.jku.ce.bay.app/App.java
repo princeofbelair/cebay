@@ -15,17 +15,20 @@ import java.util.concurrent.TimeUnit;
 
 public class App {
 
+    public static Random rnd = new Random();
+    public static String seederActor = "seederActor" + rnd.nextInt();
+
     public static void main(String[] args) {
 
-        Random rnd = new Random();
 
-        ActorSystem actorSystem = ActorSystem.create("testActor13");
-        ActorRef actor = actorSystem.actorOf(SeederActor.props(), "testActor13");
-
+        //create seeder actor system
+        ActorSystem actorSystem = ActorSystem.create(seederActor);
+        ActorRef actor = actorSystem.actorOf(SeederActor.props(), seederActor);
+        //send message to seeder actor
         publishFile(actor);
 
     }
-
+    //send the seeder actor a message, as reaction on receiving that message he will send a publish message to ce-bay
     private static void publishFile(ActorRef actor) {
         actor.tell(new SeederActor.InitPublish(), null);
     }

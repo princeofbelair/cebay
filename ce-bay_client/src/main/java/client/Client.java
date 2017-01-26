@@ -1,8 +1,6 @@
 package client;
 
-import akka.actor.ActorSelection;
-import akka.actor.Props;
-import akka.actor.UntypedActor;
+import akka.actor.*;
 import at.jku.ce.bay.api.*;
 import at.jku.ce.bay.app.App;
 import at.jku.ce.bay.utils.CEBayHelper;
@@ -78,10 +76,11 @@ public class Client extends UntypedActor {
                 //choose seeder from whom to download the file
                 System.out.print("Enter Index of Seeder: ");
                 String index = App.in.readLine();
-                System.out.println(seeders.get(Integer.parseInt(index)));
+                //System.out.println(seeders.get(Integer.parseInt(index)));
 
-                ActorSelection remoteSeeder = context().actorSelection(seeders.get(Integer.parseInt(index)));
+                ActorRef remoteSeeder = context().actorFor(seeders.get(Integer.parseInt(index)));
                 //send message to chosen seeder to download the file
+
                 remoteSeeder.tell(new GetFile(InitFindFile.name), getSelf());
             }
         //answer of the remote seeder if the requested file was not found

@@ -74,7 +74,6 @@ public class SeederActor extends UntypedActor {
             //if unknown message
             getSender().tell("Diese Nachricht konnte nicht verarbeitet werden!", getSelf());
         }
-
     }
 
     private String hashedFileName() {

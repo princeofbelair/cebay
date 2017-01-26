@@ -30,19 +30,6 @@ public class SeederActor extends UntypedActor {
     //get ref from ce-bay for communication
     private ActorSelection cebay = context().actorSelection(CEBayHelper.GetRegistryActorRef());
 
-    //TODO Alex: unsere versuche vl brauchst ja noch iwas davon
-
-    //Path path = Paths.get("C:\\home\\joe\\foo");
-    //private File file = new File(getPath("C:"+ File.separator + "Users" + File.separator + "Romana" + File.separator + "Desktop" + File.separator + "CE_Klausur.pdf"));
-    //private File fileNew = new File(App.class.getProtectionDomain().getCodeSource().getLocation().getPath());
-    //private String directory = fileNew.getParent().toString();
-
-    /*public static String getAbsolutePath(String fileDirectory, String filename) throws UnsupportedEncodingException {
-        String absolutePath = URLDecoder.decode(fileDirectory.toString(),"UTF-8")+File.separator+filename;
-        System.out.println(absolutePath);
-        return absolutePath;
-    }*/
-
     public void onReceive(Object message) throws Throwable {
         //receiving this message from app
         if(message instanceof InitPublish) {

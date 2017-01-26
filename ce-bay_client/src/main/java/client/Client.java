@@ -4,6 +4,7 @@ import akka.actor.*;
 import at.jku.ce.bay.api.*;
 import at.jku.ce.bay.app.App;
 import at.jku.ce.bay.utils.CEBayHelper;
+import scala.concurrent.duration.Duration;
 
 import java.io.FileOutputStream;
 import java.util.ArrayList;
@@ -33,6 +34,7 @@ public class Client extends UntypedActor {
         if(message instanceof InitPublish) {
             //ask ce-bay what files are available
             cebay.tell(new GetFileNames(), getSelf());
+            getContext().setReceiveTimeout(Duration.create("1 second"));
         //answer from ce-bay to the message getFileNames() - list of published files
         } else if(message instanceof FilesFound) {
             FilesFound files = (FilesFound) message;
@@ -54,6 +56,7 @@ public class Client extends UntypedActor {
             System.out.println("Filename to find: " + InitFindFile.name);
             //message to ce-bay to find a specific file (filename - input from user)
             cebay.tell(new FindFile(InitFindFile.name), getSelf());
+            getContext().setReceiveTimeout(Duration.create("1 second"));
         //answer from ce-bay on message findFile - returns a list of seeders who are providing the requested file
         } else if(message instanceof SeederFound) {
             SeederFound data = (SeederFound) message;
@@ -80,10 +83,14 @@ public class Client extends UntypedActor {
 
                 ActorRef remoteSeeder = context().actorFor(seeders.get(Integer.parseInt(index)));
                 //send message to chosen seeder to download the file
-
                 remoteSeeder.tell(new GetFile(InitFindFile.name), getSelf());
+                getContext().setReceiveTimeout(Duration.create("1 second"));
             }
         //answer of the remote seeder if the requested file was not found
+        } else if (message instanceof ReceiveTimeout) {
+            getContext().setReceiveTimeout(Duration.Undefined());
+            System.out.println("Remote seeder is not available");
+            App.showMenu();
         } else if(message instanceof FileNotFound) {
             System.out.println("The requested file was not found on the server.");
             //user can choose what to do next
@@ -104,6 +111,7 @@ public class Client extends UntypedActor {
         } else {
             //send a message back to the sender, that this message is unknown
             getSender().tell("Diese Nachricht konnte nicht verarbeitet werden!", getSelf());
+            getContext().setReceiveTimeout(Duration.create("1 second"));
             //user can choose what to do next
             App.showMenu();
         }
